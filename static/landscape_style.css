@@ -1,0 +1,38 @@
+@font-face {
+    font-family: 'BebasNeueRegular';
+    src: url('https://sites.google.com/site/directorybesttheme/font/BebasNeue-webfont.eot');
+    src: url('https://sites.google.com/site/directorybesttheme/font/BebasNeue-webfont.eot?#iefix') format('embedded-opentype'),
+         url('https://sites.google.com/site/directorybesttheme/font/BebasNeue-webfont.woff') format('woff'),
+         url('https://sites.google.com/site/directorybesttheme/font/BebasNeue-webfont.ttf') format('truetype'),
+         url('https://sites.google.com/site/directorybesttheme/font/BebasNeue-webfont.svg#BebasNeueRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+	font-family: 'BebasNeueBook', 'Raleway', 'Verdana', 'BebasNeueRegular';
+	color: #555;
+}
+
+/** background: #222; width: 1800; height: 1000; margin-left: auto; margin-right: auto; */
+#sigma-container {
+/*  position: relative;
+  border-radius: 4px;*/
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  background: #333;
+  /*height: 500px;*/
+  width: 95%;
+  height: 95%;
+  margin-left: auto;
+  margin-right:auto;
+  margin-top:auto;
+  margin-bottom:auto;
+
+  border: 2px solid;
+  border-radius: 10px;
+}
+
+.sigma-edge {
+    opacity: 0.3;
+}
