@@ -3,7 +3,6 @@ from flask import Flask
 
 from networkx.readwrite import json_graph
 import networkx as nx
-import community
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
@@ -14,6 +13,7 @@ import json
 import os
 import copy
 import cPickle
+
 
 from mediacloudlandscape.landscape import *
 
@@ -55,12 +55,22 @@ def landscape():
 @app.route('/landscape_live/<int:controversy_id>/<int:dump_id>/<int:timeslice_id>')
 def landscape_live(controversy_id, dump_id, timeslice_id):
 	gexf_path = create_landscape(controversy_id, dump_id, timeslice_id)
-	return render_template('sigma_test.html', gexf_path=gexf_path)
+	return render_template('landscape_live.html', gexf_path=gexf_path)
 
-@app.route('/dumps/<int:dump_id>')
-def dumps(dump_id):
-	ds = list_dumps(dump_id)
-	return render_template('dumps.html', dump_id=dump_id, dumps=ds)
+@app.route('/landscape_file/<string:graph_file>')
+def landscape_file(graph_file):
+    if(graph_file == 'ebola'):
+        f = '/static/ebola-15-2.gexf'
+
+    if(graph_file == 'mlk'):
+        f = '/static/mlk-2015-export-test-2.gexf'
+
+    return render_template('landscape_file.html', file=f)
+
+@app.route('/dumps/<int:controversy_id>')
+def dumps(controversy_id):
+	ds = list_dumps(controversy_id)
+	return render_template('dumps.html', controversy_id=controversy_id, dumps=ds)
 	# return str([d['controversy_dumps_id'] for d in ds])
 
 if __name__ == '__main__':
