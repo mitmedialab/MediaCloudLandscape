@@ -12,12 +12,18 @@ import os
 import copy
 import cPickle
 
+# ----------------------------------
+
 berkman_projects = os.environ['BKP']
 api_key = cPickle.load( file( os.path.expanduser( berkman_projects + '/MediaCloud/mediacloud_api_key.pickle' ), 'r' ) )
 mc = mediacloud.api.MediaCloud(api_key)
 
+# ----------------------------------
+
 current_gen = 1
 generation_md = { 1: { 'controversy_id': 720, 'top_word_count': 100 }}
+
+# ----------------------------------
 
 def build_top_words(media_list, timeslice_id=None, remove_words=None):
     # TODO: Add parameters for wordCount resolution (sample size, etc.)
@@ -55,6 +61,7 @@ def build_network(top_words, sources, media_attribs=None):
     
     # Media Source / Word Network
     msw_network = nx.DiGraph()
+    # msw_network = nx.Graph()
 
     pairwise_sources = {}
 
@@ -88,6 +95,17 @@ def build_network(top_words, sources, media_attribs=None):
     #     msw_network[node]['viz']['color']['g'] = "100"
     #     msw_network[node]['viz']['color']['b'] = "100"
     #     msw_network[node]['viz']['size'] = "10"
+
+    # print "== COMMUNITY DETECTION ==\n\n"
+    # partition = community.best_partition(msw_network)
+    # count = 0.
+    # for com in set(partition.values()):
+    #     count = count + 1.
+    #     list_nodes = [nodes for nodes in partition.keys() if partition[nodes] == com]
+    #     for node in list_nodes:
+    #         print "- {0}\n".format(node)
+    #         n = msw_network[node]
+    #         n['modularity_class'] = str(count)
 
     return msw_network
 
@@ -264,8 +282,8 @@ def generate_network_of_frames(controversy_id, dump_id, timeslice_id, num_of_sou
     
     linefeed=chr(10) # linefeed=\n
     s=linefeed.join(nx.generate_gexf(frame_network))  # doctest: +SKIP
-    for line in nx.generate_gexf(frame_network):  # doctest: +SKIP
-        print line
+    # for line in nx.generate_gexf(frame_network):  # doctest: +SKIP
+    #     print line
 
     return s
 
