@@ -8,6 +8,7 @@ It works by selecting a set of influential media sources (blogs, citizen media, 
 
 ## How To Read It
 There are a few ways to read the resulting visualization. 
+
 1.	Node Type: There are two types of nodes visualized: Media Sources and Words. Looking at Media Source nodes allows one to see which media sources use the most similar language about the topic. Similar Media Source nodes will be pulled together because they use many words in common. Media Sources that have less language in common will be further apart. Word Nodes appear close to words that are used in the same context. 
 
 2.	Color: Communities of discourse in the network are represented by categorical colors. Each color represents a community, identifying that there are a cluster of words and media sources that use language in a similar way. These communities do not represent completely distinct conversations, but rather clusters of word usage that occur frequently together. Similar colors do not indicate similar word usage.
