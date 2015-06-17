@@ -1,0 +1,170 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="/static/landscape_style.css">
+
+  </head>
+<body>
+  <br>
+  <h1>Media Cloud Landscape</h1>
+  <h2>Discovering Communities of Discourse in Large-Scale News Data</h2>
+  <br>
+  <div id="sigma-container"></div>
+  <br>
+
+
+<script src="/static/sigma.min.js"></script>
+<script src="/static/degreeToSize.js"></script>
+<script src="/static/plugins/sigma.parsers.gexf.min.js"></script>
+<script src="/static/plugins/sigma.layout.forceAtlas2.min.js"></script>
+<script src="/static/plugins/sigma.plugins.filter.min.js"></script>
+<script type="text/javascript" src="/static/jLouvain.js"></script>
+<script type="text/javascript" src="/static/d3.min.js"></script>
+<!-- bower:js -->
+<!-- <script src="../bower_components/jquery/dist/jquery.js"></script> -->
+<!-- endbower -->
+<script>
+  gexf_path = 'http://localhost:5000/' + '{{ gexf_path }}' + '.gexf';
+  // gexf_path = 'http://localhost:5000/' + '{{ gexf_path }}' + '.json';
+  // gexf_path = '/static/mlk-2015-export-test-2.gexf'
+  // alert(gexf_path);
+  sigma.parsers.gexf(gexf_path,
+    // '/static/mc_network_2015-03-31T02:24:39.849731.gexf',
+  	// '/static/mlk-2015-export-test-2.gexf',
+  	// TODO: Change this to a URL that gen's network
+    // 'MLK-Simple-2015-Jan-16a.gexf',
+    { // Here is the ID of the DOM element that
+      // will contain the graph:
+      container: 'sigma-container',
+      renderers: [
+        {
+          container: document.getElementById('sigma-container'),
+          type: 'svg' // sigma.renderers.canvas works as well
+          // 'webgl', 'canvas', 'svg'
+        }
+      ],
+     //  defaultLabelColor: '#fff',
+      settings: {
+        // defaultNodeColor: '#ec5148'
+        drawEdges: true,
+        drawLabels: true,
+        defaultLabelColor: '#EEE',
+        // defaultEdgeSize: 0.1,
+        defaultEdgeType: 'curve',
+        edgeColor:'source',
+        // edgeColor:'default',
+        // labelThreshold:4,
+		    labelSize:'proportional',
+		    labelSizeRatio:'2',
+        // labelColor:'node',
+        // defaultEdgeColor:'#ddd',
+        
+        // defaultNodeColor:'#EEE',
+        
+        // font: 'Lato',
+        // fontStyle:"bold",
+        // batchEdgesDrawing:true,
+        // webglEdgesBatchSize:10000,
+        // webglOversamplingRatio:0.8,
+        // hideEdgesOnMove:false,
+        // zoomMax:8,
+        maxEdgeSize:30,
+        minEdgeSize:0.1,
+        maxNodeSize:8,
+        minNodeSize:5,
+        // animationsTime:10,
+        // verbose:true
+
+        // labelHoverBGColor: "rgb(200, 0, 0, 0)",
+        // defaultHoverLabelBGColor: "rgb(200, 0, 0, 0)",
+        // enableHovering: false,
+        defaultNodeHoverColor: '#EEE',
+        nodeHoverColor: 'default'
+  	  },
+  	  graphProperties: {
+		    minNodeSize : 20,
+		    maxNodeSize : 100,
+		    minEdgeSize : 1.5,
+		    maxEdgeSize : 20
+	   }
+    },
+    function(s) {
+
+      // TODO: Filter nodes by degree counts
+      // dropNode(id) for permanent deletion
+      // var filter = new sigma.plugins.filter(s);
+      
+      var nodes = s.graph.nodes();
+      len = nodes.length;
+
+      // We need to initialize the graph with x & y coordinates or it won't display
+      // https://stackoverflow.com/questions/21795125/json-is-not-read-by-sigma-js/21802049#21802049
+      for (i = 0; i < len; i++) {
+          nodes[i].x = Math.random();
+          nodes[i].y = Math.random();
+          nodes[i].size = s.graph.degree(nodes[i].id);
+          // nodes[i].color = nodes[i].center ? '#333' : '#666';
+      }
+
+      console.log('Node Count Pre-Filter: ' + nodes.length);
+
+      // filter.nodesBy(function(n) {
+      //   return this.degree(n.id) > 2;
+      // }, 'non-isolates').apply();
+
+      
+      var nodes = s.graph.nodes();
+      console.log('Node Count Post-Filter: ' + nodes.length);
+
+      var node_ids = [];
+      for (var ii = 0; ii < s.graph.nodes.length; ii++) {
+        node_ids.push(s.graph.nodes[ii].id);
+      }
+
+      var community = jLouvain().nodes(node_ids).edges(s.graph.edges());
+      var community_assignment_result  = community();
+      console.log('Resulting Community Data', community_assignment_result);
+      var max_community_number = 0;
+
+      for (i = 0; i < len; i++) {
+        nodes[i].community = community_assignment_result[i];
+        max_community_number = max_community_number < community_assignment_result[i] ? community_assignment_result[i]: max_community_number;
+      }
+
+      var color = d3.scale.category20().domain(d3.range([0, max_community_number]));
+
+      for (i = 0; i < len; i++) {
+        nodes[i].color = color(nodes[i].community);
+      }
+
+      // Toggle Node Focus between Media Sources a Sources and Words
+      var degreeDirection = 'in';
+      function onClick(event) {
+        window.console.log("clicked!");
+        window.console.log(s)
+        if(degreeDirection == 'in') {
+          s.degreeToSize('out');
+          degreeDirection = 'out';
+        } else {
+          s.degreeToSize('in');
+          degreeDirection = 'in';
+        }
+      } 
+      s.bind('click', onClick);
+
+      // Default to Word Focus
+      s.degreeToSize('in');
+
+      // Run Layout
+      s.startForceAtlas2({worker: true, barnesHutOptimize: false, scalingRatio: 8000, slowDown: 1});
+
+	  // Current timeout to stop layout (need better solution)
+	  window.setTimeout(function() {
+	    s.stopForceAtlas2();
+      // s.graph.rescale();
+	  }, 10000);
+    }
+  );
+</script>
+</body>
+</html>
