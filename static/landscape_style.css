@@ -14,6 +14,23 @@ body {
 	color: #555;
 }
 
+h1, h2 {
+  width: 95%;
+  margin-left: auto;
+  margin-right:auto;
+  margin-top:auto;
+  margin-bottom:auto;
+}
+
+h1 {
+  font-size: 60;
+}
+
+h2 {
+  font-size: 30;
+  color: #BBB;
+}
+
 /** background: #222; width: 1800; height: 1000; margin-left: auto; margin-right: auto; */
 #sigma-container {
 /*  position: relative;
