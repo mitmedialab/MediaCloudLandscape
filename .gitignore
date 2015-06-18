@@ -55,3 +55,6 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# System-Specific Deploy Configuration
+app.config
