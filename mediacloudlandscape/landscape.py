@@ -14,8 +14,9 @@ import ConfigParser
 
 # ----------------------------------
 
+basedir = os.path.dirname(os.path.abspath(__file__))
 config = ConfigParser.ConfigParser()
-config.read('app.config')
+config.read(os.path.join(basedir, 'app.config'))
 api_key = config.get('mediacloud', 'key')
 
 mc = mediacloud.api.MediaCloud(api_key)
