@@ -11,10 +11,15 @@ import json
 import os
 import copy
 import ConfigParser
+import logging
+
+basedir = os.path.dirname(os.path.abspath(__file__)) + '/..'
+
+# logging setup
+logging.basicConfig(filename=os.path.join(basedir, 'log', 'landscape.log'), level=logging.DEBUG)
 
 # ----------------------------------
 
-basedir = os.path.dirname(os.path.abspath(__file__)) + '/..'
 config = ConfigParser.ConfigParser()
 config.read(os.path.join(basedir, 'app.config'))
 api_key = config.get('mediacloud', 'key')
@@ -296,7 +301,8 @@ def create_landscape(controversy_id, dump_id, timeslice_id):
     # remove_media_sources = ['digg.com', 'delicious.com', 'en-gb.facebook', 'newsvine.com', 'nationalservice.gov', 'nobelprize.org', 'Twitter', 'YouTube', 'selmamovie.com', 'hollywoodreporter.com', 'variety.com', 'imdb.com']
     remove_media_sources = []
     remove_words = []
-    filename = basedir + 'static/mc_network_{0}'.format(datetime.datetime.now().isoformat())
+    filename = os.path.join(basedir, 'static', 'mc_network_{0}'.format(datetime.datetime.now().isoformat()))
+    logging.info('Graph file: {0}'.format(filename))
     # list_top_sources(cid, num_of_sources, dump_id, slice_id)
     # plot_top_sources(cid, num_of_sources, dump_id, slice_id, title='MTV MLK - Top {0} Sources / Overall'.format(num_of_sources))
     nof = generate_network_of_frames(controversy_id, dump_id, timeslice_id, num_of_sources, filename, remove_media_sources, remove_words, generate_word_lists=True)
