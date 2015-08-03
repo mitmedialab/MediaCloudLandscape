@@ -58,7 +58,7 @@ def index():
 @app.route('/landscape')
 def landscape():
 	# create_landscape(controversy_id, dump_id, timeslice_id)
-	return render_template('sigma_test.html')
+	return render_template('landscape_main.html')
 
 @app.route('/landscape_live/<int:controversy_id>/<int:dump_id>/<int:timeslice_id>')
 def landscape_live(controversy_id, dump_id, timeslice_id):
@@ -80,6 +80,10 @@ def dumps(controversy_id):
 	ds = list_dumps(controversy_id)
 	return render_template('dumps.html', controversy_id=controversy_id, dumps=ds)
 	# return str([d['controversy_dumps_id'] for d in ds])
+
+@app.route('/controversy_list')
+def controversy_list():
+    return json.dumps(mc.controversyList())
 
 if __name__ == '__main__':
     app.run(debug=True)

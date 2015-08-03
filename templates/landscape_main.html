@@ -1,0 +1,51 @@
+<!-- landscape_main.html -->
+<link rel="stylesheet" type="text/css" href="/static/landscape_style.css">
+<script src="static/bower_components/jquery/dist/jquery.js"></script>
+
+<script>
+	var data2;
+	$( document ).ready(function() {
+		$.getJSON("/controversy_list", function(data){
+			data2 = data;
+			$("#controversy_id").html("");
+			for(i in data) {
+				c = data[i]
+				console.log(c)
+				$("#controversy_id").append("<option value='"+c['controversies_id']+"'>"+c['name']+"</option>");
+			}
+			// for(key in json)
+			// 	$("#fillME").append("<option value='"+ [key].value+"'>"+json[key].title+"</option>");
+   		});
+	});
+
+	// TODO: On select in controversy dropdown, load dumps for controversy
+	// TODO: On select in dumps dropdown, load timeslices for dump
+	// TODO: On change of controversy, reload dumps, clear timeslices ( or pick the first one )
+	// TODO: On change of dump, reload timeslices ( or pick the first one)
+
+</script>
+
+<br>
+
+<div id="chooser">
+	<!-- AJAX populated drop-down: controversy_id -->
+	<label for="controversy_id">Controversy:&nbsp;&nbsp;</label>
+	<select id="controversy_id"></select>
+	&nbsp;&nbsp;&nbsp;&nbsp;
+	<!-- AJAX populated drop-down: dump_id -->
+	<label for="controversy_id">Data Dump:&nbsp;&nbsp;</label>
+	<select id="dump_id"></select>
+	&nbsp;&nbsp;&nbsp;&nbsp;
+	<!-- AJAX populated drop-down: timeslice_id -->
+	<label for="controversy_id">Timeslice:&nbsp;&nbsp;</label>
+	<select id="timeslice_id"></select>
+	
+	&nbsp;&nbsp;&nbsp;&nbsp;
+
+	<!-- submit: execute query with above and init / redirect to network div -->
+	<input type="submit" id="submitButton"  name="submitButton" value="Create Network">
+</div>
+
+<br>
+<hr>
+<br>
