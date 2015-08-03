@@ -18,7 +18,7 @@ from mediacloudlandscape.landscape import *
 import ConfigParser
 
 config = ConfigParser.ConfigParser()
-config.read('app.config')
+path = config.read(os.path.join(basedir, '../', 'app.config'))
 api_key = config.get('mediacloud', 'key')
 
 mc = mediacloud.api.MediaCloud(api_key)
