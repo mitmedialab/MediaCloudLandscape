@@ -3,6 +3,9 @@ Web-Based Media Landscape Tool for Media Cloud
 
 Media Cloud Landscape is an interactive visualization that allows exploration of media activity and the language used around specific topics. 
 
+# Installation
+`chown www-data:www-data log`
+
 ## How It Works
 It works by selecting a set of influential media sources (blogs, citizen media, mainstream media) for a given topic and collecting the most frequently used words for each. With this set of language used by each source, a bipartite network graph is built to represent the usage of words by media sources, with the connections weighted by the frequency of usage. This allows for for laying out the network visualization by clustering (Force Atlas 2) and identifying communities of discourse using network community detection.
 
