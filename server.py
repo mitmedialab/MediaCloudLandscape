@@ -15,16 +15,19 @@ import copy
 import ConfigParser
 from mediacloudlandscape.landscape import *
 
+# base directory for relative paths
+basedir = os.path.dirname(os.path.abspath(__file__))
+
 # logging setup
 import logging
-logging.basicConfig(filename='landscape.log', level=logging.DEBUG)
+logging.basicConfig(filename=os.path.join(basedir, 'log', 'landscape.log'), level=logging.DEBUG)
 
 # set up base directory and init mediacloud
-basedir = os.path.dirname(os.path.abspath(__file__))
-print(os.path.join(basedir, 'app.config'))
+
 config = ConfigParser.ConfigParser()
 config.read(os.path.join(basedir, 'app.config'))
 api_key = config.get('mediacloud', 'key')
+logging.info('MediaCloud API Initializing...')
 mc = mediacloud.api.MediaCloud(api_key)
 logging.info('MediaCloud API Initialized.')
 
