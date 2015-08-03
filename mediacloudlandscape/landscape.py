@@ -10,13 +10,16 @@ import mediacloud
 import json
 import os
 import copy
-import cPickle
+import ConfigParser
 
 # ----------------------------------
 
-berkman_projects = os.environ['BKP']
-api_key = cPickle.load( file( os.path.expanduser( berkman_projects + '/MediaCloud/mediacloud_api_key.pickle' ), 'r' ) )
+config = ConfigParser.ConfigParser()
+config.read('app.config')
+api_key = config.get('mediacloud', 'key')
+
 mc = mediacloud.api.MediaCloud(api_key)
+print(api_key)
 
 # ----------------------------------
 
