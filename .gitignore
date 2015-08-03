@@ -60,3 +60,5 @@ target/
 # System-Specific Deploy Configuration
 app.config
 static/*.gexf
+static/*.json
+static/*.txt
