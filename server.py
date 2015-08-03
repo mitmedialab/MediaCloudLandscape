@@ -12,17 +12,21 @@ import mediacloud
 import json
 import os
 import copy
-
+import ConfigParser
 from mediacloudlandscape.landscape import *
 
-import ConfigParser
+# logging setup
+import logging
+logging.basicConfig(filename='landscape.log', level=logging.DEBUG)
 
+# set up base directory and init mediacloud
+basedir = os.path.dirname(os.path.abspath(__file__))
+print(os.path.join(basedir, 'app.config'))
 config = ConfigParser.ConfigParser()
-path = config.read(os.path.join(basedir, '../', 'app.config'))
+config.read(os.path.join(basedir, 'app.config'))
 api_key = config.get('mediacloud', 'key')
-
 mc = mediacloud.api.MediaCloud(api_key)
-print(api_key)
+logging.info('MediaCloud API Initialized.')
 
 def get_dumps(controversy_id):
     query = 'https://api.mediacloud.org/api/v2/controversy_dumps/list?controversies_id=%s&key=%s' % (controversy_id, api_key)
