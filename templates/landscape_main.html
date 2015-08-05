@@ -1,9 +1,11 @@
 <!-- landscape_main.html -->
 <link rel="stylesheet" type="text/css" href="/static/landscape_style.css">
 <script src="static/bower_components/jquery/dist/jquery.js"></script>
+<script src="static/bower_components/momentjs/moment.js"></script>
 
 <script>
 	var data2;
+	var date;
 	$( document ).ready(function() {
 		$.getJSON("/controversy_list", function(data){
 			data2 = data;
@@ -13,8 +15,6 @@
 				console.log(c)
 				$("#controversy_id").append("<option value='"+c['controversies_id']+"'>"+c['name']+"</option>");
 			}
-			// for(key in json)
-			// 	$("#fillME").append("<option value='"+ [key].value+"'>"+json[key].title+"</option>");
    		});
 	});
 
@@ -22,6 +22,42 @@
 	// TODO: On select in dumps dropdown, load timeslices for dump
 	// TODO: On change of controversy, reload dumps, clear timeslices ( or pick the first one )
 	// TODO: On change of dump, reload timeslices ( or pick the first one)
+
+$(function() {
+  $("#controversy_id").on("change",function() {
+	$.getJSON("/dump_list/" + $('#controversy_id').val(), function(data){
+		$("#dump_id").html("");
+		for(i in data) {
+			c = data[i]
+			console.log(c)
+			var start_date = moment(c['start_date']).format('MM-DD-YYYY');
+			var end_date = moment(c['end_date']).format('MM-DD-YYYY');
+			$("#dump_id").append("<option value='"+c['controversy_dumps_id']+"'>"+start_date+" - "+end_date+"</option>");
+		}
+	});
+  }); 
+});
+
+$(function() {
+  $("#dump_id").on("change",function() {
+	$.getJSON("/timeslice_list/" + $('#dump_id').val(), function(data){
+		$("#timeslice_id").html("");
+		for(i in data) {
+			c = data[i]
+			console.log(c)
+			var start_date = moment(c['start_date']).format('MM-DD-YYYY');
+			var end_date = moment(c['end_date']).format('MM-DD-YYYY');
+			$("#timeslice_id").append("<option value='"+c['controversy_dump_time_slices_id']+"'>"+start_date+" - "+end_date+"</option>");
+		}
+	});
+  }); 
+});
+
+$(function() {
+  $("#createNetwork").on("click",function() {
+  	window.open('/landscape_live/' + $('#controversy_id').val() + '/' + $('#dump_id').val() + '/' + $('#timeslice_id').val(), name='_self')
+  });
+ });
 
 </script>
 
@@ -43,7 +79,7 @@
 	&nbsp;&nbsp;&nbsp;&nbsp;
 
 	<!-- submit: execute query with above and init / redirect to network div -->
-	<input type="submit" id="submitButton"  name="submitButton" value="Create Network">
+	<input type="submit" id="createNetwork"  name="submitButton" value="Create Network">
 </div>
 
 <br>
