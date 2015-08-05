@@ -4,12 +4,14 @@
 <script src="static/bower_components/momentjs/moment.js"></script>
 
 <script>
-	var data2;
-	var date;
 	$( document ).ready(function() {
 		$.getJSON("/controversy_list", function(data){
-			data2 = data;
+
 			$("#controversy_id").html("");
+			$("#dump_id").empty();
+			$("#timeslice_id").empty();
+
+			$("#controversy_id").append("<option value=''>-</option>").prop('selected',true);
 			for(i in data) {
 				c = data[i]
 				console.log(c)
@@ -18,15 +20,14 @@
    		});
 	});
 
-	// TODO: On select in controversy dropdown, load dumps for controversy
-	// TODO: On select in dumps dropdown, load timeslices for dump
-	// TODO: On change of controversy, reload dumps, clear timeslices ( or pick the first one )
-	// TODO: On change of dump, reload timeslices ( or pick the first one)
-
 $(function() {
   $("#controversy_id").on("change",function() {
 	$.getJSON("/dump_list/" + $('#controversy_id').val(), function(data){
-		$("#dump_id").html("");
+		
+		$("#dump_id").empty();
+		$("#timeslice_id").empty();
+		
+		$("#dump_id").append("<option value=''>-</option>").prop('selected',true);
 		for(i in data) {
 			c = data[i]
 			console.log(c)
@@ -41,7 +42,10 @@ $(function() {
 $(function() {
   $("#dump_id").on("change",function() {
 	$.getJSON("/timeslice_list/" + $('#dump_id').val(), function(data){
-		$("#timeslice_id").html("");
+		
+		$("#timeslice_id").empty();
+		
+		$("#timeslice_id").append("<option value=''>-</option>").prop('selected',true);
 		for(i in data) {
 			c = data[i]
 			console.log(c)
