@@ -85,6 +85,14 @@ def dumps(controversy_id):
 def controversy_list():
     return json.dumps(mc.controversyList())
 
+@app.route('/dump_list/<int:controversy_id>')
+def dump_list(controversy_id):
+    return json.dumps(mc.controversyDumpList(controversy_id))
+
+@app.route('/timeslice_list/<int:dump_id>')
+def timeslice_list(dump_id):
+    return json.dumps(mc.controversyDumpTimeSliceList(dump_id))
+
 if __name__ == '__main__':
     app.run(debug=True)
 
